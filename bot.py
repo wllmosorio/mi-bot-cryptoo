@@ -1,13 +1,26 @@
 """
 Bot de trading conservador - Binance
 Estrategia: RSI (compra < 35, vende > 65)
-Capital inicial sugerido: $10 USD minimo
 """
 
 import time
 import os
 from binance.client import Client
 from binance.exceptions import BinanceAPIException
+
+def cargar_env():
+    try:
+        with open(".env") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    key, value = line.split("=", 1)
+                    os.environ[key.strip()] = value.strip()
+        print("Variables cargadas desde .env")
+    except FileNotFoundError:
+        print("No se encontro .env, usando variables del sistema")
+
+cargar_env()
 
 API_KEY    = os.getenv("BINANCE_API_KEY", "").strip()
 API_SECRET = os.getenv("BINANCE_SECRET_KEY", "").strip()
